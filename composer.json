@@ -44,7 +44,7 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.16.1",
-        "psalm/plugin-symfony": "^2.4",
+        "psalm/plugin-symfony": "^2.4 || ^3.0",
         "roave/security-advisories": "dev-latest",
         "setono/code-quality-pack": "^2.1.1",
         "setono/dao-bundle": "^1.0",
