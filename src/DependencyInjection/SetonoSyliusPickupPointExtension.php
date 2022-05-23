@@ -73,5 +73,60 @@ final class SetonoSyliusPickupPointExtension extends AbstractResourceExtension
 
             $loader->load('services/providers/post_nord.xml');
         }
+
+        if ($config['providers']['bpost'] && $config['providers']['bpost']['enabled'] === true) {
+            $bpostConfig = $config['providers']['bpost'];
+            $container->setParameter('setono_bpost.base_url', $bpostConfig['base_url']);
+
+            if (isset($bpostConfig['http_client'])) {
+                $container->setParameter('setono_bpost.http_client', $bpostConfig['http_client']);
+            }
+
+            if (isset($bpostConfig['request_factory'])) {
+                $container->setParameter('setono_bpost.request_factory', $bpostConfig['request_factory']);
+            }
+
+            if (isset($bpostConfig['stream_factory'])) {
+                $container->setParameter('setono_bpost.stream_factory', $bpostConfig['stream_factory']);
+            }
+
+            if (isset($bpostConfig['partner_id'])) {
+                $container->setParameter('setono_bpost.partner_id', $bpostConfig['partner_id']);
+            }
+
+            $loader->load('services/providers/bpost.xml');
+            $loader->load('services/clients/bpost.xml');
+            $loader->load('services/transformers/bpost.xml');
+        }
+
+        if ($config['providers']['postnl'] && $config['providers']['postnl']['enabled'] === true) {
+            $postnlConfig = $config['providers']['postnl'];
+
+            $container->setParameter('setono_postnl.base_url', $postnlConfig['base_url']);
+
+            if (isset($postnlConfig['http_client'])) {
+                $container->setParameter('setono_postnl.http_client', $postnlConfig['http_client']);
+            }
+
+            if (isset($postnlConfig['request_factory'])) {
+                $container->setParameter('setono_postnl.request_factory', $postnlConfig['request_factory']);
+            }
+
+            if (isset($postnlConfig['stream_factory'])) {
+                $container->setParameter('setono_postnl.stream_factory', $postnlConfig['stream_factory']);
+            }
+
+            if (isset($postnlConfig['api_key'])) {
+                $container->setParameter('setono_postnl.api_key', $postnlConfig['api_key']);
+            }
+
+            if (isset($postnlConfig['address_class'])) {
+                $container->setParameter('setono_postnl.address_class', $postnlConfig['address_class']);
+            }
+
+            $loader->load('services/providers/postnl.xml');
+            $loader->load('services/clients/postnl.xml');
+            $loader->load('services/transformers/postnl.xml');
+        }
     }
 }

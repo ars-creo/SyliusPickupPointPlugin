@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="setono_sylius_pickup_point.provider.bpost"
+                 class="Setono\SyliusPickupPointPlugin\Provider\BpostProvider">
+            <argument type="service" id="setono_bpost.client"/>
+            <argument type="service" id="setono_bpost.pickup_point_transformer"/>
+            <argument>%setono_bpost.partner_id%</argument>
+            <tag name="setono_sylius_pickup_point.provider" code="bpost" label="setono_sylius_pickup_point.provider.bpost"/>
+        </service>
+    </services>
+</container>

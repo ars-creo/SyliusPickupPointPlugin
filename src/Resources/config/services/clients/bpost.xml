@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Setono\SyliusPickupPointPlugin\Client\ClientInterface" alias="setono_bpost.client"/>
+        <service id="setono_bpost.client" class="Setono\SyliusPickupPointPlugin\Client\Bpost\Client">
+            <argument type="service" id="setono_bpost.http_client"/>
+            <argument type="service" id="setono_bpost.request_factory"/>
+            <argument type="service" id="setono_bpost.stream_factory"/>
+            <argument>%setono_bpost.base_url%</argument>
+        </service>
+    </services>
+</container>

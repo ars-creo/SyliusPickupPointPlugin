@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Setono\SyliusPickupPointPlugin;
 
 use Setono\SyliusPickupPointPlugin\DependencyInjection\Compiler\RegisterProvidersPass;
+use Setono\SyliusPickupPointPlugin\DependencyInjection\Compiler\RegisterHttpClientPass;
+use Setono\SyliusPickupPointPlugin\DependencyInjection\Compiler\RegisterFactoriesPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -19,6 +21,8 @@ final class SetonoSyliusPickupPointPlugin extends AbstractResourceBundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterProvidersPass());
+        $container->addCompilerPass(new RegisterHttpClientPass());
+        $container->addCompilerPass(new RegisterFactoriesPass());
     }
 
     public function getSupportedDrivers(): array

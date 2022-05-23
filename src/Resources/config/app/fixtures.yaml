@@ -21,6 +21,8 @@ sylius_fixtures:
                             - 'ES'
                             - 'CN'
                             - 'UK'
+                            - 'NL'
+                            - 'BE'
                         zones:
                             WORLD:
                                 name: 'World'
@@ -39,6 +41,8 @@ sylius_fixtures:
                                     - 'ES'
                                     - 'CN'
                                     - 'UK'
+                                    - 'NL'
+                                    - 'BE'
                             DAO_PP_COUNTRIES:
                                 name: 'Denmark'
                                 countries:
@@ -61,6 +65,16 @@ sylius_fixtures:
                                     - 'PT'
                                     - 'ES'
                                     - 'UK'
+                            BPOST_PP_COUNTRIES:
+                                name: 'Bpost countries'
+                                countries:
+                                    - 'NL'
+                                    - 'BE'
+                            POSTNL_PP_COUNTRIES:
+                                name: 'PostNL countries'
+                                countries:
+                                    - 'NL'
+                                    - 'BE'
 
                 setono_sylius_pickup_point_shipping_method:
                     options:
@@ -101,6 +115,22 @@ sylius_fixtures:
                                 name: "PostNord home delivery"
                                 enabled: true
                                 zone: "WORLD"
+                                channels:
+                                    - "FASHION_WEB"
+                            postnl_pickup_point:
+                                code: "postnl_pickup_point"
+                                name: "PostNL with pickup points"
+                                enabled: true
+                                zone: "POSTNL_PP_COUNTRIES"
+                                pickup_point_provider: postnl
+                                channels:
+                                    - "FASHION_WEB"
+                            bpost_pickup_point:
+                                code: "bpost_pickup_point"
+                                name: "Bpost with pickup points"
+                                enabled: true
+                                zone: "BPOST_PP_COUNTRIES"
+                                pickup_point_provider: bpost
                                 channels:
                                     - "FASHION_WEB"
                             faker:

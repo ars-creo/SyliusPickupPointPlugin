@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Setono\SyliusPickupPointPlugin\Client\ClientInterface" alias="setono_postnl.client"/>
+        <service id="setono_postnl.client" class="Setono\SyliusPickupPointPlugin\Client\PostNL\Client">
+            <argument type="service" id="setono_postnl.http_client"/>
+            <argument type="service" id="setono_postnl.request_factory"/>
+            <argument type="service" id="setono_postnl.stream_factory"/>
+            <argument>%setono_postnl.api_key%</argument>
+            <argument>%setono_postnl.base_url%</argument>
+        </service>
+    </services>
+</container>

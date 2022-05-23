@@ -18,3 +18,9 @@ setono_sylius_pickup_point:
         gls: true
         post_nord: true
         dao: true
+        bpost:
+            enabled: true
+            partner_id: '%env(BPOST_PARTNER_ID)%'
+        postnl:
+            enabled: true
+            api_key: '%env(POSTNL_API_KEY)%'
