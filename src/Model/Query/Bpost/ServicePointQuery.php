@@ -2,7 +2,9 @@
 
 namespace Setono\SyliusPickupPointPlugin\Model\Query\Bpost;
 
-final class ServicePointQuery implements ServicePointQueryInterface
+use Setono\SyliusPickupPointPlugin\Model\Query\CountryAwareInterface;
+
+final class ServicePointQuery implements ServicePointQueryInterface, CountryAwareInterface
 {
     private const ENDPOINT = '/Locator';
 

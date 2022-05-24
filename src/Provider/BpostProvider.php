@@ -6,7 +6,8 @@ use Psr\Http\Client\NetworkExceptionInterface;
 use Setono\SyliusPickupPointPlugin\Client\ClientInterface;
 use Setono\SyliusPickupPointPlugin\Factory\Bpost\ServicePointQueryFactory;
 use Setono\SyliusPickupPointPlugin\Factory\ServicePointQueryFactoryInterface;
-use Setono\SyliusPickupPointPlugin\Model\Query\Bpost\ServicePointQueryInterface;
+use Setono\SyliusPickupPointPlugin\Model\Query\Bpost;
+use Setono\SyliusPickupPointPlugin\Model\Query\CountryAwareInterface;
 use Setono\SyliusPickupPointPlugin\Transformer\PickupPointTransformerInterface;
 use Setono\SyliusPickupPointPlugin\Exception\TimeoutException;
 use Setono\SyliusPickupPointPlugin\Model\PickupPointCode;
@@ -14,7 +15,7 @@ use Setono\SyliusPickupPointPlugin\Model\PickupPointInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 
 /**
- * @see https://pudo.bpost.be/ServicePointQuery for more information
+ * @see https://pudo.bpost.be/ for more information
  */
 final class BpostProvider extends Provider
 {
@@ -44,20 +45,12 @@ final class BpostProvider extends Provider
 
     public function findPickupPoints(OrderInterface $order): iterable
     {
-        $shippingAddress = $order->getShippingAddress();
-        if (null === $shippingAddress) {
-            return [];
-        }
-
-        $countryCode = $shippingAddress->getCountryCode();
-        if (null === $countryCode) {
-            return [];
-        }
-
         $servicePointQuery = $this->getServicePointQueryFactory()->createServicePointQueryForOrder($order);
         $servicePoints = $this->client->locate($servicePointQuery);
         foreach ($servicePoints as $item) {
-            $item['country'] = $countryCode;
+            if ($servicePointQuery instanceof CountryAwareInterface) {
+                $item['country'] = $servicePointQuery->getCountry();
+            }
             yield $this->transform($item);
         }
     }
@@ -67,12 +60,16 @@ final class BpostProvider extends Provider
         $servicePoints = [];
         try {
             $servicePointQuery = $this->getServicePointQueryFactory()->createServicePointQueryForPickupPoint($code);
-            foreach (ServicePointQueryInterface::TYPES as $type) {
-                $servicePointQuery->setType($type);
-                $servicePoints = $this->client->locate($servicePointQuery);
-                if (count($servicePoints) > 0) {
-                    break;
+            if ($servicePointQuery instanceof Bpost\ServicePointQueryInterface) {
+                foreach (Bpost\ServicePointQueryInterface::TYPES as $type) {
+                    $servicePointQuery->setType($type);
+                    $servicePoints = $this->client->locate($servicePointQuery);
+                    if (count($servicePoints) > 0) {
+                        break;
+                    }
                 }
+            } else {
+                $servicePoints = $this->client->locate($servicePointQuery);
             }
         } catch (NetworkExceptionInterface $e) {
             throw new TimeoutException($e);
@@ -92,8 +89,6 @@ final class BpostProvider extends Provider
         try {
             foreach ($this->countryCodes as $countryCode) {
                 $servicePointQuery = $this->getServicePointQueryFactory()->createServicePointQueryForAllPickupPoints($countryCode);
-
-                $servicePointQuery->setCountry($countryCode);
                 $servicePoints = $this->client->locate($servicePointQuery);
                 foreach ($servicePoints as $item) {
                     $item['country'] = $countryCode;

@@ -49,20 +49,9 @@ final class PostNLProvider extends Provider
 
     public function findPickupPoints(OrderInterface $order): iterable
     {
-        $shippingAddress = $order->getShippingAddress();
-        if (null === $shippingAddress) {
-            return [];
-        }
-
-        $countryCode = $shippingAddress->getCountryCode();
-        if (null === $countryCode) {
-            return [];
-        }
-
         $servicePointQuery = $this->getServicePointQueryFactory()->createServicePointQueryForOrder($order);
         $servicePoints = $this->client->locate($servicePointQuery);
         foreach ($servicePoints as $item) {
-            $item['country'] = $countryCode;
             yield $this->transform($item);
         }
     }
@@ -75,16 +64,13 @@ final class PostNLProvider extends Provider
         } catch (NetworkExceptionInterface $e) {
             throw new TimeoutException($e);
         }
-
         $servicePoints = [];
         foreach ($servicePoint as $index => $point) {
             $servicePoints[$index] = $point;
         }
-
         if (\count($servicePoints) < 1) {
             return null;
         }
-
         return $this->transform($servicePoints);
     }
 
@@ -120,7 +106,6 @@ final class PostNLProvider extends Provider
                         ->createServicePointQueryForAllPickupPoints($countryCode, $postalCode);
                     $servicePoints = $this->client->locate($servicePointQuery);
                     foreach ($servicePoints as $item) {
-                        $item['country'] = $countryCode;
                         yield $this->transform($item);
                     }
                 }

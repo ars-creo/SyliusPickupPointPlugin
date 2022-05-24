@@ -31,7 +31,7 @@ class ServicePointQueryFactory implements ServicePointQueryFactoryInterface
         }
 
         if ($countryCode !== null) {
-            $servicePointQuery->setCountryCode($countryCode);
+            $servicePointQuery->setCountry($countryCode);
         }
 
         if ($postCode !== null) {
@@ -41,7 +41,6 @@ class ServicePointQueryFactory implements ServicePointQueryFactoryInterface
         if ($city !== null) {
             $servicePointQuery->setCity($city);
         }
-
         return $servicePointQuery;
     }
 
@@ -56,7 +55,7 @@ class ServicePointQueryFactory implements ServicePointQueryFactoryInterface
     public function createServicePointQueryForAllPickupPoints(string $countryCode, ?string $postalCode = null): ServicePointQueryInterface
     {
         $servicePointQuery = new ServicePointQuery();
-        $servicePointQuery->setCountryCode($countryCode);
+        $servicePointQuery->setCountry($countryCode);
 
         if ($postalCode !== null) {
             $servicePointQuery->setPostalCode($postalCode);

@@ -30,7 +30,7 @@ final class Client implements ClientInterface
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        string $baseUrl = 'https://pudo.bpost.be'
+        string $baseUrl
     ) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;

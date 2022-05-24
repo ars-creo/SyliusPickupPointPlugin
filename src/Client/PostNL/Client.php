@@ -33,7 +33,7 @@ final class Client implements ClientInterface
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
         string $apiKey,
-        string $baseUrl = 'https://api-sandbox.postnl.nl'
+        string $baseUrl
     ) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;

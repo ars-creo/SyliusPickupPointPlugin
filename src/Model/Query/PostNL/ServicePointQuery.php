@@ -2,9 +2,10 @@
 
 namespace Setono\SyliusPickupPointPlugin\Model\Query\PostNL;
 
+use Setono\SyliusPickupPointPlugin\Model\Query\CountryAwareInterface;
 use Setono\SyliusPickupPointPlugin\Model\Query\ServicePointQueryInterface;
 
-final class ServicePointQuery implements ServicePointQueryInterface
+final class ServicePointQuery implements ServicePointQueryInterface, CountryAwareInterface
 {
     private const ENDPOINT = '/shipment/v2_1/locations/nearest';
 
@@ -46,14 +47,14 @@ final class ServicePointQuery implements ServicePointQueryInterface
         $this->street = $street;
     }
 
-    public function getCountryCode(): string
+    public function getCountry(): string
     {
         return $this->countryCode;
     }
 
-    public function setCountryCode(string $countryCode): void
+    public function setCountry(string $country): void
     {
-        $this->countryCode = $countryCode;
+        $this->countryCode = $country;
     }
 
     public function getPostalCode(): string
@@ -129,6 +130,7 @@ final class ServicePointQuery implements ServicePointQueryInterface
             }
             $arrayValue[ucfirst($key)] = $value;
         }
+
         return $arrayValue;
     }
 }

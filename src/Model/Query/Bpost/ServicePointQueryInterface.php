@@ -29,4 +29,6 @@ interface ServicePointQueryInterface extends BaseServicePointQueryInterface
         self::TYPE_SHOP => 8,
         self::TYPE_KARIBOO => 16,
     ];
+
+    public function setType(int $type);
 }
