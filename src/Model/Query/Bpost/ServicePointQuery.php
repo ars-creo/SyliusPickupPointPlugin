@@ -14,7 +14,7 @@ final class ServicePointQuery implements ServicePointQueryInterface, CountryAwar
 
     private string $language;
 
-    private string $street;
+    private ?string $street;
 
     private string $number;
 
@@ -45,6 +45,7 @@ final class ServicePointQuery implements ServicePointQueryInterface, CountryAwar
         $this->checkList = 1;
         $this->info = 1;
         $this->limit = 20;
+        $this->street = null;
 
         $this->partner = $partner;
     }
@@ -88,7 +89,7 @@ final class ServicePointQuery implements ServicePointQueryInterface, CountryAwar
         $this->language = $language;
     }
 
-    public function getStreet(): string
+    public function getStreet(): ?string
     {
         return $this->street;
     }

@@ -14,6 +14,7 @@ use Setono\SyliusPickupPointPlugin\Transformer\PickupPointTransformerInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Core\Model\OrderInterface;
 use Webmozart\Assert\Assert;
+use Sylius\Component\Core\Model\Address;
 
 /**
  * @see https://developer.postnl.nl/browse-apis/delivery-options/location-webservice/testtool-rest/#/default/get_v2_1_locations_nearest
@@ -26,7 +27,7 @@ final class PostNLProvider extends Provider
     private ClientInterface $client;
     private PickupPointTransformerInterface $pickupPointTransformer;
     private ManagerRegistry $managerRegistry;
-    private ?ServicePointQueryFactory $servicePointQueryFactory;
+    private ?ServicePointQueryFactoryInterface $servicePointQueryFactory;
 
     private array $countryCodes;
     private string $addressClassString;
@@ -35,8 +36,8 @@ final class PostNLProvider extends Provider
         ClientInterface $client,
         PickupPointTransformerInterface $pickupPointTransformer,
         ManagerRegistry $managerRegistry,
-        string $addressClassString,
         ?ServicePointQueryFactoryInterface $servicePointQueryFactory = null,
+        string $addressClassString = Address::class,
         array $countryCodes = ['BE', 'NL']
     ) {
         $this->client = $client;
@@ -90,6 +91,7 @@ final class PostNLProvider extends Provider
         /** @var EntityRepository $repository */
         $repository = $manager->getRepository($this->addressClassString);
         try {
+            $alreadyScannedPoints = [];
             foreach ($this->countryCodes as $countryCode) {
                 $qb = $repository->createQueryBuilder('sa');
                 $postalCodes = $qb->distinct()->select('sa.postcode')
@@ -106,7 +108,14 @@ final class PostNLProvider extends Provider
                         ->createServicePointQueryForAllPickupPoints($countryCode, $postalCode);
                     $servicePoints = $this->client->locate($servicePointQuery);
                     foreach ($servicePoints as $item) {
-                        yield $this->transform($item);
+                        $pickupPoint = $this->transform($item);
+                        $code = $pickupPoint->getCode();
+                        if ($code === null || in_array($code->getValue(), $alreadyScannedPoints, true)) {
+                            continue;
+                        }
+                        // Prevent the same adjacent pickup points from being added multiple times
+                        $alreadyScannedPoints[] = $code->getValue();
+                        yield $pickupPoint;
                     }
                 }
             }

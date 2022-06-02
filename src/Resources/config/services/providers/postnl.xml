@@ -9,7 +9,6 @@
             <argument type="service" id="setono_postnl.client"/>
             <argument type="service" id="setono_postnl.pickup_point_transformer"/>
             <argument type="service" id="doctrine"/>
-            <argument>%setono_postnl.address_class%</argument>
             <tag name="setono_sylius_pickup_point.provider" code="postnl" label="setono_sylius_pickup_point.provider.postnl"/>
         </service>
     </services>
