@@ -65,7 +65,7 @@ class ServicePointQueryFactory implements ServicePointQueryFactoryInterface
         $servicePointQuery->setCountry($countryCode);
 
         if ($postalCode !== null) {
-            $servicePointQuery->setZone($postalCode);
+            $servicePointQuery->setZip($postalCode);
         }
 
         return $servicePointQuery;

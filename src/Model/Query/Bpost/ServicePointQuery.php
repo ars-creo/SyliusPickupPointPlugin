@@ -38,6 +38,8 @@ final class ServicePointQuery implements ServicePointQueryInterface, CountryAwar
 
     private int $limit;
 
+    private string $zip;
+
     public function __construct(string $partner)
     {
         $this->checkData = 1;
@@ -215,6 +217,16 @@ final class ServicePointQuery implements ServicePointQueryInterface, CountryAwar
     public function setInfo(bool $info): void
     {
         $this->info = $info;
+    }
+
+    public function getZip(): string
+    {
+        return $this->zip;
+    }
+
+    public function setZip(string $zip): void
+    {
+        $this->zip = $zip;
     }
 
     public function toArray(): array
